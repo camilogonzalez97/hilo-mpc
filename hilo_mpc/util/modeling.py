@@ -204,7 +204,7 @@ class QuadraticCost(GenericCost):
             raise ValueError(f"You passed an {references.type_name()} expression to the {type}_ref. In this case you "
                              f"need to tell me if this is a path following or trajectory tracking problem. \n Please "
                              f"set either 'path_following=True' or trajectory_tracking=True.")
-        if check_if_has_duplicates(self.name_varying_trajectories):
+        if check_if_has_duplicates(self.name_varying_trajectories) and references is not None:
             raise TypeError("Two different varying trajectory for the same states are not allowed.")
 
     def _add_cost_term(self, var, names, W, ref, path_following, trajectory_tracking, ind, type):
@@ -1159,7 +1159,7 @@ class RungeKutta:
             collocation_points = 'radau'
         n_x = x.size1()
         n_z = z.size1()
-        function = ca.Function('function', [t, x, z, u, p], [ode, alg, quad])
+        function = ca.Function('function', [t, x, z, u, p], [ode, alg, quad], {"allow_free": True})
 
         B, C, D, T = cls._construct_polynomial_basis(degree, collocation_points, dt)  # h instead of dt
 

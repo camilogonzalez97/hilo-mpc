@@ -1763,6 +1763,7 @@ class NMPC(Controller, DynamicOptimization):
 
             nlp_dict = {'f': self._J, 'x': self._v, 'p': self._param_npl_mpc, 'g': self._g}
             if self._solver_name in self._solver_name_list_nlp:
+                self._nlp_opts["expand"] = True
                 solver = ca.nlpsol('solver', self._solver_name, nlp_dict, self._nlp_opts)
             elif self._solver_name in self._solver_name_list_qp:
                 solver = ca.qpsol('solver', self._solver_name, nlp_dict, self._nlp_opts)
